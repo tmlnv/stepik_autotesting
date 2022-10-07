@@ -1,1 +1,1 @@
-# stepic_autotesting
+# stepik_autotesting
