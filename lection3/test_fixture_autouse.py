@@ -9,12 +9,20 @@ link = "http://selenium1py.pythonanywhere.com/"
 def browser():
     print("\nstart browser for test..")
     browser = webdriver.Chrome()
-    return browser
+    yield browser
+    print("\nquit browser..")
+    browser.quit()
+
+
+@pytest.fixture(autouse=True)
+def prepare_data():
+    print()
+    print("preparing some critical data for every test")
 
 
 class TestMainPage1():
-    # вызываем фикстуру в тесте, передав ее как параметр
     def test_guest_should_see_login_link(self, browser):
+        # не передаём как параметр фикстуру prepare_data, но она все равно выполняется
         browser.get(link)
         browser.find_element(By.CSS_SELECTOR, "#login_link")
 

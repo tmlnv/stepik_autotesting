@@ -5,15 +5,17 @@ from selenium.webdriver.common.by import By
 link = "http://selenium1py.pythonanywhere.com/"
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def browser():
     print("\nstart browser for test..")
     browser = webdriver.Chrome()
-    return browser
+    yield browser
+    print("\nquit browser..")
+    browser.quit()
 
 
 class TestMainPage1():
-    # вызываем фикстуру в тесте, передав ее как параметр
+
     def test_guest_should_see_login_link(self, browser):
         browser.get(link)
         browser.find_element(By.CSS_SELECTOR, "#login_link")
@@ -21,3 +23,10 @@ class TestMainPage1():
     def test_guest_should_see_basket_link_on_the_main_page(self, browser):
         browser.get(link)
         browser.find_element(By.CSS_SELECTOR, ".basket-mini .btn-group > a")
+
+    # добавить -rx при запуске, чтобы увидеть текст
+    @pytest.mark.xfail(reason="fixing this bug right now")
+    def test_guest_should_see_search_button_on_the_main_page(self, browser):
+        browser.get(link)
+        browser.find_element(By.CSS_SELECTOR, "button.favorite")
+
